@@ -1,1 +1,62 @@
+# Homework 2
+Jiaming Yu
+U72316560
+
+## Phase 1
+Three APIs: Secure File Uploader/Ingester; Text NLP Analysis; News feed Ingester
+
+### User Stories
+
+**Secure File Uploader/Ingester**    
+As a User, I want to  
+upload various file types (pdf, docx,csv, etc.)  
+be alerted if there were issues with uploading their files  
+convert file types (e.g. from word, pdf to text)  
+search for past files they have uploaded  
+re-upload files when uploading fails  
+secure uploading process  
+keep my content private and safe  
+
+**Text NLP Analysis:**  
+As a user, I want to  
+basic search functionality using keywords  
+be able to pass text to the API and get in return its sentiment  
+pass text into an API in other languages that could be understood or translated  
+automatically extract and classify text data, such as tweets, emails  
+
+**News feed Ingester**  
+As a user, I want to  
+search based on keywords  
+discover content from the WEB through url
+
+### Decision
+For each module, make a decision:  Procedure-based or entity-based  
+For each module, decide on operations, data and status
+
+**Secure File Uploader/Ingester**   
+Entity-based API  
+Data: File{title,paragraph,sentence}  
+Operations: create(upload - convert), delete, read(check_status), update(upload again)  
+Status: Success, In process, Failure with error message (Convert failure; Upload failure - Space not enough;  
+Upload failure - file type not supported; Upload failure - file broken; Upload failure - Internet connection problem)  
+
+**Text NLP Analysis**  
+Procedure based API  
+translated_text=translate(text)  
+sentiment = get_sentiment(text)  
+bias = compare(text1, text2)  
+
+Data: text  
+Status: Success, Failure  
+
+**News feed Ingester**    
+Procedure based API  
+url = search_web(keyword)  
+checkurl(url)  
+content = get_url(url)  
+converted = convert(content)  
+final = format(converted)  
+
+
+
 
