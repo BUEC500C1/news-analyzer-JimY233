@@ -49,8 +49,13 @@ bias = compare(text1, text2)
 Data: text  
 Status: Success, Failure  
 
-**News feed Ingester**    
-Procedure based API  
+**News feed Ingester**   
+Entity-based API
+Data: File{keyword, articles}  
+Operations: create(search(keyword)), delete, read(check_status), update(search and upload again)  
+Status: Success, Failure
+
+Or Procedure based API  
 url = search_web(keyword)  
 checkurl(url)  
 content = get_url(url)  
