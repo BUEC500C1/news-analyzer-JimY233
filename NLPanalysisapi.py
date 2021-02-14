@@ -11,4 +11,4 @@ class NLPanalysis(Resource):
 api.add_resource(NLPanalysis,'/')
 
 if __name__ == '__main__':
-  app run(debug = True)
+  app.run(debug = True)
