@@ -8,7 +8,7 @@ class SecureFileUploader(Resource):
   def get(self):
     return {'Hello': 'world'}
     
-api add_resource(SecureFileUploader,'\')
+api add_resource(SecureFileUploader,'/')
 
 if __name__ == '__main__':
   app run(debug = True)
