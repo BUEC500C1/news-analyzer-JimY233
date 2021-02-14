@@ -8,7 +8,7 @@ class NewsIngester(Resource):
   def get(self):
     return {'Hello': 'world'}
     
-api add_resource(NewsIngester,'\')
+api.add_resource(NewsIngester,'/')
 
 if __name__ == '__main__':
   app run(debug = True)
