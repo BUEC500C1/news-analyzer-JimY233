@@ -8,7 +8,7 @@ class NLPanalysis(Resource):
   def get(self):
     return {"Hello", "world"}
     
-api add_resource(NLPanalysis,'\')
+api.add_resource(NLPanalysis,'/')
 
 if __name__ == '__main__':
   app run(debug = True)
