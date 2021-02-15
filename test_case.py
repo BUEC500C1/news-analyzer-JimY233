@@ -6,3 +6,6 @@ import securefileuploaderapi
 import NLPanalysisapi
 import newsingesterapi
 
+def test_case():
+  assert 1 == 1
+
