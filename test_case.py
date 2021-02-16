@@ -8,7 +8,7 @@ import newsingesterapi
 
 import tracemalloc
 import cProfile
-import re
+import numpy as np
 
 import logging
 
@@ -29,7 +29,7 @@ for stat in top_stats[:10]:
     print(stat)
 
     
-cProfile.run('re.compile("foo|bar")')
+cProfile.run("20+10")
 
 logging.warning('Watch out!')  # will print a message to the console
 logging.info('I told you so')  # will not print anything
