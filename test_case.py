@@ -8,7 +8,6 @@ import newsingesterapi
 
 import tracemalloc
 import cProfile
-import numpy as np
 
 import logging
 
