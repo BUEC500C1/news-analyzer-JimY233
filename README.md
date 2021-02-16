@@ -50,18 +50,17 @@ Data: text
 Status: Success, Failure  
 
 **News feed Ingester**   
-Entity-based API
-Data: File{keyword, articles}  
-Operations: create(search(keyword)), delete, read(check_status), update(search and upload again)  
-Status: Success, Failure
-
-Or Procedure based API  
+Procedure based API  
 url = search_web(keyword)  
 checkurl(url)  
 content = get_url(url)  
 converted = convert(content)  
 final = format(converted)  
 
+(Or maybe Entity-based API  
+Data: File{keyword, articles}   
+Operations: create(search(keyword)), delete, read(check_status), update(search and upload again)   
+Status: Success, Failure)  
 
 
 
