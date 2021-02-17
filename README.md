@@ -1,6 +1,7 @@
 # Homework 2
 Jiaming Yu
 U72316560
+Osama
 
 ## Phase 1
 Three APIs: Secure File Uploader/Ingester; Text NLP Analysis; News feed Ingester
