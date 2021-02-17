@@ -5,7 +5,7 @@
 import securefileuploaderapi
 import NLPanalysisapi
 import newsingesterapi
-from SecureFileUploader.FileIngester import *
+from SecureFileUploader.FileUploader import *
 
 import tracemalloc
 import cProfile
