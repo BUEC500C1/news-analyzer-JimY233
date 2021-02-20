@@ -1,6 +1,6 @@
 ### Secure File Uploader/Ingester
 
-**User Stories**
+**User Stories**  
 As a User, I want to  
 upload various file types (pdf, docx,csv, etc.)  
 be alerted if there were issues with uploading their files  
@@ -10,13 +10,13 @@ re-upload files when uploading fails
 secure uploading process  
 keep my content private and safe  
 
-**Entity-based API**   
+**Entity-based API**    
 Data: File{title,paragraph,sentence}  
 Operations: create(upload - convert), delete, read(check_status), update(upload again)  
 Status: Success, In process, Failure with error message (Convert failure; Upload failure - Space not enough;  
 Upload failure - file type not supported; Upload failure - file broken; Upload failure - Internet connection problem) 
 
-**Data Structure**
+**Data Structure**  
 ID, FileType, UserID, CreatedTime(TimeStamp), FileSize, NLP entities (Keywords), sentiment, Content of the file, Notes, File Tags, Permissions, ModifiedTime, File source, File authors, File Status(Uploaded, Under conversion, NLP processed)
 
 **object**  
@@ -39,7 +39,7 @@ File = {
 }  
 
 #### method
-**File**
+**File**  
 Post /file    
 Post /file/{File_ID}/FileURL    
 Post /file/{File_ID}/File_Metadata    
@@ -55,14 +55,14 @@ Get /file/{File_ID}/File_Metadata
 Get /file/{File_ID}/TEXT  
 Delete /file/{File_ID}  
 
-**User**
+**User**  
 Post /User/{User_ID}  
 Put /User/{User_ID}  
 Get /User/{User_ID}/allfiles  
 Delete /User/{User_ID}  
 Delete /User/{User_ID}/allfiles  
 
-**Events**  
+**Events**    
 Event_Upload: File is uploaded  
 Event_Convert: file is converted to text  
 Event_Update: File is updated  
