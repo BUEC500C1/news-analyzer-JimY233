@@ -19,7 +19,7 @@ Upload failure - file type not supported; Upload failure - file broken; Upload f
 **Data Structure**
 ID, FileType, UserID, CreatedTime(TimeStamp), FileSize, NLP entities (Keywords), sentiment, Content of the file, Notes, File Tags, Permissions, ModifiedTime, File source, File authors, File Status(Uploaded, Under conversion, NLP processed)
 
-**object**
+**object**  
 File = {  
     "ID:/document/User_ID/File_ID": {  
         "Uploadtime": "2021.2.17",  
@@ -38,8 +38,8 @@ File = {
     }  
 }  
 
-**method**
-##### File
+#### method
+**File**
 Post /file    
 Post /file/{File_ID}/FileURL    
 Post /file/{File_ID}/File_Metadata    
@@ -55,17 +55,17 @@ Get /file/{File_ID}/File_Metadata
 Get /file/{File_ID}/TEXT  
 Delete /file/{File_ID}  
 
-##### User
+**User**
 Post /User/{User_ID}  
 Put /User/{User_ID}  
 Get /User/{User_ID}/allfiles  
 Delete /User/{User_ID}  
 Delete /User/{User_ID}/allfiles  
 
-**Events**
-Event_Upload: File is uploaded
-Event_Convert: file is converted to text
-Event_Update: File is updated
+**Events**  
+Event_Upload: File is uploaded  
+Event_Convert: file is converted to text  
+Event_Update: File is updated  
 
 Create() - Post  
 Delete() - Delete  
