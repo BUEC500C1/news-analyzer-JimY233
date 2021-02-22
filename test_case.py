@@ -2,10 +2,9 @@
 # Defining your own testing here
 # ============================================================
 
-import securefileuploaderapi
-import NLPanalysisapi
-import newsingesterapi
 from SecureFileUploader.FileIngester import *
+from NewsIngester.newsingester import *
+from NLP_Analysis.nlpanalysis import *
 
 import tracemalloc
 import cProfile
