@@ -29,13 +29,13 @@ data = {
     }
 }
 
+"""
 '''
 Events
 Event_upload: Upload the file
 Event_convert: Convert the file to text
 Event_modify: File content is modified
 '''
-
 def create_data():
   '''
   if upload event not successful, log error message
@@ -74,6 +74,13 @@ class SecureFileUploader(Resource):
     pass
     
 api.add_resource(SecureFileUploader,'/')
+"""
+
+
+@app.route('/')
+def index():
+    return "Hello, World!"
+
 
 if __name__ == '__main__':
   app.run(debug = True)
