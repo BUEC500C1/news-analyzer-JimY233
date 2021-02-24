@@ -2,7 +2,7 @@
 Secure File Uploader/Ingester
 Entity-based Api
 """
-from flask import Flask, jsonify
+from flask import Flask, jsonify, abort
 from flask_restful import Resource, Api
 
 app = Flask(__name__)
