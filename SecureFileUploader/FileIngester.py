@@ -10,16 +10,16 @@ api = Api(app)
 
 #file record in json file for example
 files = {
-    "ID:/document/User_ID/File_ID",
-    "Uploadtime": "2021.2.17",
-    "FileURL": "securefileuploader/file1.pdf",
-    "FileMetadata": {"Authors": ["Jiaming Yu", "jimmy", "jiamingy"],
+    "ID:/document/User_ID/File_ID": {
+        "Uploadtime": "2021.2.17",
+        "FileURL": "securefileuploader/file1.pdf",
+        "FileMetadata": {"Authors": ["Jiaming Yu", "jimmy", "jiamingy"],
                          "Modifiedtime": "2021.2.17",
                          "File source": "google",
                          "File size": "15MB",
                          "File tags": ["tag1","tag2","tag3"]
                         },
-    "TEXT": {"TEXT_ID": "text_id",
+      "TEXT": {"TEXT_ID": "text_id",
                "TEXT": "text",
                "Sentiment": "semtiment",
                "NLP": ["nlp1","nlp2","nlp3"]
