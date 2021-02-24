@@ -3,23 +3,23 @@ Secure File Uploader/Ingester
 Entity-based Api
 """
 from flask import Flask, jsonify
-#from flask_restful import Resource, Api
+from flask_restful import Resource, Api
 
 app = Flask(__name__)
-#api = Api(app)
+api = Api(app)
 
 #file record in json file for example
 files = {
     "ID:/document/User_ID/File_ID",
-        "Uploadtime": "2021.2.17",
-        "FileURL": "securefileuploader/file1.pdf",
-        "FileMetadata": {"Authors": ["Jiaming Yu", "jimmy", "jiamingy"],
+    "Uploadtime": "2021.2.17",
+    "FileURL": "securefileuploader/file1.pdf",
+    "FileMetadata": {"Authors": ["Jiaming Yu", "jimmy", "jiamingy"],
                          "Modifiedtime": "2021.2.17",
                          "File source": "google",
                          "File size": "15MB",
                          "File tags": ["tag1","tag2","tag3"]
                         },
-      "TEXT": {"TEXT_ID": "text_id",
+    "TEXT": {"TEXT_ID": "text_id",
                "TEXT": "text",
                "Sentiment": "semtiment",
                "NLP": ["nlp1","nlp2","nlp3"]
@@ -81,9 +81,9 @@ def get_files():
 @app.route('/todo/api/v1.0/files/<string:file_id>', methods=['GET'])
 def get_file(file_id):
     file = filter(lambda t: t['id'] == file_id, files)
-    if len(file) == 0:
+    if len(files) == 0:
         abort(404)
-    return jsonify({'file': file[0]})
+    return jsonify({'file': files[0]})
 
 if __name__ == '__main__':
   app.run(debug = True)
