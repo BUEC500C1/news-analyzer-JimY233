@@ -2,16 +2,14 @@
 Secure File Uploader/Ingester
 Entity-based Api
 """
-from flask import Flask
+from flask import Flask, jsonify
 from flask_restful import Resource, Api
-
-import json
 
 app = Flask(__name__)
 api = Api(app)
 
-#data in json file for example
-data = {
+#file record in json file for example
+file = {
     "ID:/document/User_ID/File_ID": {
         "Uploadtime": "2021.2.17",
         "FileURL": "securefileuploader/file1.pdf",
@@ -29,7 +27,7 @@ data = {
     }
 }
 
-
+"""
 '''
 Events
 Event_upload: Upload the file
@@ -63,24 +61,22 @@ class SecureFileUploader(Resource):
   def post(self): #create: upload file and create the data for this file
     '''
     if Event_upload:
-      create_data() #create data
+      create_data() #create file_record
     '''
     return {'Hello': 'world'}
-  def delete(self): #delete: delete the file and relating data
+  def delete(self): #delete: delete the file and relating file_record
     pass
-  def put(self): #update: update the data record
+  def put(self): #update: update the file_record
     pass
   def get(self): #read: read data json file and return information
     pass
     
 api.add_resource(SecureFileUploader,'/')
+"""
 
-
-'''
-@app.route('/')
-def index():
-    return "Hello, World!"
-'''
+@app.route('/todo/api/v1.0/file', methods=['GET'])
+def get_tasks():
+    return jsonify({'files': file})
 
 if __name__ == '__main__':
   app.run(debug = True)
