@@ -3,10 +3,10 @@ Secure File Uploader/Ingester
 Entity-based Api
 """
 from flask import Flask, jsonify
-from flask_restful import Resource, Api
+#from flask_restful import Resource, Api
 
 app = Flask(__name__)
-api = Api(app)
+#api = Api(app)
 
 #file record in json file for example
 files = {
