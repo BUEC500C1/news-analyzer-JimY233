@@ -29,7 +29,7 @@ data = {
     }
 }
 
-"""
+
 '''
 Events
 Event_upload: Upload the file
@@ -74,13 +74,13 @@ class SecureFileUploader(Resource):
     pass
     
 api.add_resource(SecureFileUploader,'/')
-"""
 
 
+'''
 @app.route('/')
 def index():
     return "Hello, World!"
-
+'''
 
 if __name__ == '__main__':
   app.run(debug = True)
