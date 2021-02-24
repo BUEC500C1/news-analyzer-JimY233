@@ -9,8 +9,8 @@ app = Flask(__name__)
 api = Api(app)
 
 #file record in json file for example
-file = {
-    "ID:/document/User_ID/File_ID": {
+files = {
+    "ID:/document/User_ID/File_ID",
         "Uploadtime": "2021.2.17",
         "FileURL": "securefileuploader/file1.pdf",
         "FileMetadata": {"Authors": ["Jiaming Yu", "jimmy", "jiamingy"],
@@ -75,8 +75,15 @@ api.add_resource(SecureFileUploader,'/')
 """
 
 @app.route('/todo/api/v1.0/file', methods=['GET'])
-def get_tasks():
-    return jsonify({'files': file})
+def get_files():
+    return jsonify({'files': files})
+
+@app.route('/todo/api/v1.0/files/<string:file_id>', methods=['GET'])
+def get_file(file_id):
+    file = filter(lambda t: t['id'] == file_id, files)
+    if len(file) == 0:
+        abort(404)
+    return jsonify({'file': file[0]})
 
 if __name__ == '__main__':
   app.run(debug = True)
