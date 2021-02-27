@@ -119,8 +119,8 @@ api.add_resource(SecureFileUploader,'/')
 def get_files():
     return jsonify({'tasks': tasks})
 
-@app.route('/todo/api/v1.0/tasks/<string:task_id>', methods=['GET'])
-def get_file(file_id):
+@app.route('/todo/api/v1.0/tasks/<int:task_id>', methods=['GET'])
+def get_file(task_id):
     file = filter(lambda t: t['id'] == task_id, tasks)
     if len(tasks) == 0:
         abort(404)
@@ -143,7 +143,7 @@ def create_task():
     tasks.append(task)
     return jsonify({'task': task}), 201
 
-@app.route('/todo/api/v1.0/tasks/<string:task_id>', methods=['PUT'])
+@app.route('/todo/api/v1.0/tasks/<int:string:task_id>', methods=['PUT'])
 def update_task(task_id):
     task = filter(lambda t: t['id'] == task_id, tasks)
     if len(task) == 0:
@@ -162,7 +162,7 @@ def update_task(task_id):
     task[0]['FileURL'] = request.json.get('FileURL', task[0]['FileURL'])
     return jsonify({'task': task[0]})
 
-@app.route('/todo/api/v1.0/tasks/<string:task_id>', methods=['DELETE'])
+@app.route('/todo/api/v1.0/tasks/<int:task_id>', methods=['DELETE'])
 def delete_task(task_id):
     task = filter(lambda t: t['id'] == task_id, tasks)
     if len(task) == 0:
