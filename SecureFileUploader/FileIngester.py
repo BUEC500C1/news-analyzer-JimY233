@@ -150,14 +150,10 @@ def update_task(task_id):
         abort(404)
     if not request.json:
         abort(400)
-    if 'Uploadtime' in request.json and type(request.json['Uploadtime']) != unicode:
+    if 'Uploadtime' in request.json and type(request.json['Uploadtime']) != string:
         abort(400)
-    if 'FileURL' in request.json and type(request.json['FileURL']) != unicode:
+    if 'FileURL' in request.json and type(request.json['FileURL']) != string:
         abort(400)
-    '''
-    if 'id' in request.json and type(request.json['id']) is not unicode:
-        abort(400)
-    '''
     task[0]['Uploadtime'] = request.json.get('Uploadtime', task[0]['Uploadtime'])
     task[0]['FileURL'] = request.json.get('FileURL', task[0]['FileURL'])
     return jsonify({'task': task[0]})
