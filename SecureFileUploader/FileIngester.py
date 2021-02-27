@@ -12,6 +12,47 @@ app = Flask(__name__)
 api = Api(app)
 
 #file record in json file for example
+{
+    "tasks":[
+        {
+            "id": 1,
+            "user_id": 1,
+            "Uploadtime": "2021.2.17",
+            "FileURL": "securefileuploader/file1.pdf",
+            "FileMetadata": {"Authors": ["Jiaming Yu", "jimmy", "jiamingy"],
+                             "Modifiedtime": "2021.2.17",
+                             "File source": "google",
+                             "File size": "15MB",
+                             "File tags": ["tag1","tag2","tag3"]
+                            },
+            "TEXT": {"TEXT_ID": "text_id",
+                     "TEXT": "text",
+                     "Sentiment": "semtiment",
+                     "NLP": ["nlp1","nlp2","nlp3"]
+                    }   
+        },
+        {
+            "id": 2,
+            "user_id": 2,
+            "Uploadtime": "2021.2.27",
+            "FileURL": "securefileuploader/file2.pdf",
+            "FileMetadata": {"Authors": ["Jiaming Yu", "jimmy", "jiamingy"],
+                             "Modifiedtime": "2021.2.27",
+                             "File source": "google",
+                             "File size": "15MB",
+                             "File tags": ["tag1","tag2","tag3"]
+                            },
+            "TEXT": {"TEXT_ID": "text_id",
+                     "TEXT": "text",
+                     "Sentiment": "semtiment",
+                     "NLP": ["nlp1","nlp2","nlp3"]
+                    }   
+        }
+    ]
+}
+
+
+"""
 files = {
     "ID:/document/User_ID/File_ID": {
         "Uploadtime": "2021.2.17",
@@ -29,25 +70,7 @@ files = {
               }    
     }
 }
-tasks = {
-    "ID:/document/User_ID/File_ID": {
-        "Uploadtime": "2021.2.17",
-        "FileURL": "securefileuploader/file1.pdf",
-        "FileMetadata": {"Authors": ["Jiaming Yu", "jimmy", "jiamingy"],
-                         "Modifiedtime": "2021.2.17",
-                         "File source": "google",
-                         "File size": "15MB",
-                         "File tags": ["tag1","tag2","tag3"]
-                        },
-      "TEXT": {"TEXT_ID": "text_id",
-               "TEXT": "text",
-               "Sentiment": "semtiment",
-               "NLP": ["nlp1","nlp2","nlp3"]
-              }    
-    }
-}
 
-"""
 '''
 Events
 Event_upload: Upload the file
@@ -94,16 +117,16 @@ class SecureFileUploader(Resource):
 api.add_resource(SecureFileUploader,'/')
 """
 
-@app.route('/todo/api/v1.0/file', methods=['GET'])
+@app.route('/todo/api/v1.0/task', methods=['GET'])
 def get_files():
-    return jsonify({'files': files})
+    return jsonify({'tasks': tasks})
 
-@app.route('/todo/api/v1.0/files/<string:file_id>', methods=['GET'])
+@app.route('/todo/api/v1.0/tasks/<string:task_id>', methods=['GET'])
 def get_file(file_id):
-    file = filter(lambda t: t['id'] == file_id, files)
-    if len(files) == 0:
+    file = filter(lambda t: t['id'] == task_id, tasks)
+    if len(tasks) == 0:
         abort(404)
-    return jsonify({'file': files[0]})
+    return jsonify({'task': tasks[0]})
 
 @app.errorhandler(404)
 def not_found(error):
@@ -111,13 +134,13 @@ def not_found(error):
 
 @app.route('/todo/api/v1.0/tasks', methods=['POST'])
 def create_task():
-    if not request.json or not 'title' in request.json:
+    if not request.json or not 'TEXT' in request.json:
         abort(400)
     task = {
         'id': tasks[-1]['id'] + 1,
-        'title': request.json['title'],
-        'description': request.json.get('description', ""),
-        'done': False
+        'user_id': tasks[-1]['user_id'] + 1,
+        'Uploadtime': request.json.get('Uploadtime', ""),
+        'FileURL': request.json.get('FileURL', ""),
     }
     tasks.append(task)
     return jsonify({'task': task}), 201
@@ -129,15 +152,16 @@ def update_task(task_id):
         abort(404)
     if not request.json:
         abort(400)
-    if 'title' in request.json and type(request.json['title']) != unicode:
+    if 'Uploadtime' in request.json and type(request.json['Uploadtime']) != unicode:
         abort(400)
-    if 'description' in request.json and type(request.json['description']) is not unicode:
+    if 'FileURL' in request.json and type(request.json['FileURL']) != unicode:
         abort(400)
-    if 'done' in request.json and type(request.json['done']) is not bool:
+    '''
+    if 'id' in request.json and type(request.json['id']) is not unicode:
         abort(400)
-    task[0]['title'] = request.json.get('title', task[0]['title'])
-    task[0]['description'] = request.json.get('description', task[0]['description'])
-    task[0]['done'] = request.json.get('done', task[0]['done'])
+    '''
+    task[0]['Uploadtime'] = request.json.get('Uploadtime', task[0]['Uploadtime'])
+    task[0]['FileURL'] = request.json.get('FileURL', task[0]['FileURL'])
     return jsonify({'task': task[0]})
 
 @app.route('/todo/api/v1.0/tasks/<string:task_id>', methods=['DELETE'])
