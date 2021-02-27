@@ -150,9 +150,9 @@ def update_task(task_id):
         abort(404)
     if not request.json:
         abort(400)
-    if 'Uploadtime' in request.json and type(request.json['Uploadtime']) != string:
+    if 'Uploadtime' in request.json and isinstance(request.json['Uploadtime'], str):
         abort(400)
-    if 'FileURL' in request.json and type(request.json['FileURL']) != string:
+    if 'FileURL' in request.json and isinstance(request.json['FileURL'], str):
         abort(400)
     task[0]['Uploadtime'] = request.json.get('Uploadtime', task[0]['Uploadtime'])
     task[0]['FileURL'] = request.json.get('FileURL', task[0]['FileURL'])
