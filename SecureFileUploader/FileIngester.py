@@ -12,44 +12,42 @@ app = Flask(__name__)
 api = Api(app)
 
 #file record in json file for example
-{
-    "tasks":[
-        {
-            "id": 1,
-            "user_id": 1,
-            "Uploadtime": "2021.2.17",
-            "FileURL": "securefileuploader/file1.pdf",
-            "FileMetadata": {"Authors": ["Jiaming Yu", "jimmy", "jiamingy"],
-                             "Modifiedtime": "2021.2.17",
-                             "File source": "google",
-                             "File size": "15MB",
-                             "File tags": ["tag1","tag2","tag3"]
-                            },
-            "TEXT": {"TEXT_ID": "text_id",
-                     "TEXT": "text",
-                     "Sentiment": "semtiment",
-                     "NLP": ["nlp1","nlp2","nlp3"]
-                    }   
-        },
-        {
-            "id": 2,
-            "user_id": 2,
-            "Uploadtime": "2021.2.27",
-            "FileURL": "securefileuploader/file2.pdf",
-            "FileMetadata": {"Authors": ["Jiaming Yu", "jimmy", "jiamingy"],
-                             "Modifiedtime": "2021.2.27",
-                             "File source": "google",
-                             "File size": "15MB",
-                             "File tags": ["tag1","tag2","tag3"]
-                            },
-            "TEXT": {"TEXT_ID": "text_id",
-                     "TEXT": "text",
-                     "Sentiment": "semtiment",
-                     "NLP": ["nlp1","nlp2","nlp3"]
-                    }   
-        }
-    ]
-}
+tasks = [
+    {
+        "id": 1,
+        "user_id": 1,
+        "Uploadtime": "2021.2.17",
+        "FileURL": "securefileuploader/file1.pdf",
+        "FileMetadata": {"Authors": ["Jiaming Yu", "jimmy", "jiamingy"],
+                         "Modifiedtime": "2021.2.17",
+                         "File source": "google",
+                         "File size": "15MB",
+                         "File tags": ["tag1","tag2","tag3"]
+                        },
+        "TEXT": {"TEXT_ID": "text_id",
+                 "TEXT": "text",
+                 "Sentiment": "semtiment",
+                 "NLP": ["nlp1","nlp2","nlp3"]
+                }   
+    },
+    {
+        "id": 2,
+        "user_id": 2,
+        "Uploadtime": "2021.2.27",
+        "FileURL": "securefileuploader/file2.pdf",
+        "FileMetadata": {"Authors": ["Jiaming Yu", "jimmy", "jiamingy"],
+                         "Modifiedtime": "2021.2.27",
+                         "File source": "google",
+                         "File size": "15MB",
+                         "File tags": ["tag1","tag2","tag3"]
+                        },
+        "TEXT": {"TEXT_ID": "text_id",
+                 "TEXT": "text",
+                 "Sentiment": "semtiment",
+                 "NLP": ["nlp1","nlp2","nlp3"]
+                }
+    }
+]
 
 
 """
