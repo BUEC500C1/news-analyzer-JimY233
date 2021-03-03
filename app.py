@@ -11,13 +11,24 @@ import logging
 import sqlite3
 import os
 
+from nlp.nlp_search import *
+
 app = Flask(__name__)
 
+#where pdf files saved
 app.config['UPLOAD_FOLDER'] = 'C:/Users/user/Downloads/'
 
 @app.route('/')
 def home():
    return render_template('upload.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+       if 'username' in request.form and 'password' in request.form:
+          return "do_the_login()"
+    else:
+        return "show_the_login_form()"
 	
 @app.route('/', methods = ['GET', 'POST'])
 def upload_file():
@@ -59,7 +70,9 @@ def upload_file():
       logging.info("Tables in the databse:",Tables)
       cursor.execute('select text from files where id=?', (0,))
       values = cursor.fetchall()
-      print(values)
+      #print(type(values)) #values in class list
+      freq = search_nlp("Discussion",values)
+      print(freq) #keyword freq search
       cursor.close()
       conn.close()
 
