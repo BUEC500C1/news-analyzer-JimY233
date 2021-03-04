@@ -2,10 +2,6 @@
 # Defining your own testing here
 # ============================================================
 
-from SecureFileUploader.FileIngester import *
-from NewsIngester.newsingester import *
-from NLP_Analysis.nlpanalysis import *
-
 import tracemalloc
 import cProfile
 

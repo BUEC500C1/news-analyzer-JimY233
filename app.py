@@ -24,11 +24,67 @@ def home():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    if request.method == 'POST':
-       if 'username' in request.form and 'password' in request.form:
-          return "do_the_login()"
-    else:
-        return "show_the_login_form()"
+   if request.method == 'POST':
+      if 'username' in request.form and 'password' in request.form:
+         username = request.form['username']
+         password = request.form['password']
+
+         conn = sqlite3.connect('mydatabase.db')
+         cursor = conn.cursor()
+         cursor.execute('create table if not exists user (username, password)') 
+
+         error = None
+         user = cursor.execute(
+             'SELECT * FROM user WHERE username = ?', (username,)
+         ).fetchone()
+         if user is None:
+            error = 'Incorrect username.'
+         elif not check_password_hash(user['password'], password):
+            error = 'Incorrect password.'
+
+         if error is None:
+            session.clear()
+            session['user_id'] = user['id']
+            return redirect(url_for('upload_file'))
+
+         cursor.close()
+         conn.close()
+         return error
+
+@app.route('/register', methods=('GET', 'POST'))
+def register():
+   if request.method == 'POST':
+      username = request.form['username']
+      password = request.form['password']
+      
+      conn = sqlite3.connect('mydatabase.db')
+      cursor = conn.cursor ()
+      cursor.execute('create table if not exists user (username, password)') 
+      
+      error = None
+      if not username:
+         error = 'Username is required.'
+      elif not password:
+         error = 'Password is required.'
+      elif cursor.execute(
+         'SELECT id FROM user WHERE username = ?', (username,)
+      ).fetchone() is not None:
+         error = 'User {} is already registered.'.format(username)     
+
+      if error is None:
+         cursor.execute(
+               'INSERT INTO user (username, password) VALUES (?, ?)',
+               (username, generate_password_hash(password))
+         )
+         cursor.commit()
+         cursor.close()
+         conn.close()
+         return redirect(url_for('upload_file'))
+
+      cursor.close()
+      conn.close()
+      return error
+
 	
 @app.route('/', methods = ['GET', 'POST'])
 def upload_file():
