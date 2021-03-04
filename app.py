@@ -1,26 +1,26 @@
 import flask
-from flask import render_template
-from flask import Flask, jsonify, abort
-from flask import make_response
-from flask import request, redirect
+from flask import Flask,render_template, request, redirect, url_for,flash,session
 
+from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
-import PyPDF2
 
-import logging
+import PyPDF2
 import sqlite3
 import os
+
+import logging
 
 from nlp.nlp_search import *
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = os.urandom(24) 
 
 #where pdf files saved
 app.config['UPLOAD_FOLDER'] = 'C:/Users/user/Downloads/'
 
 @app.route('/')
 def home():
-   return render_template('upload.html')
+   return render_template('login.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -37,19 +37,22 @@ def login():
          user = cursor.execute(
              'SELECT * FROM user WHERE username = ?', (username,)
          ).fetchone()
+         print(user)
          if user is None:
             error = 'Incorrect username.'
-         elif not check_password_hash(user['password'], password):
+         #user is tuple 0-username 1-password
+         elif not check_password_hash(str(user[1]), password):
             error = 'Incorrect password.'
 
          if error is None:
             session.clear()
-            session['user_id'] = user['id']
-            return redirect(url_for('upload_file'))
+            session['user_id'] = user[0]
+            return render_template('upload.html')
 
          cursor.close()
          conn.close()
-         return error
+         flash(error)
+         return render_template('login.html')
 
 @app.route('/register', methods=('GET', 'POST'))
 def register():
@@ -67,7 +70,7 @@ def register():
       elif not password:
          error = 'Password is required.'
       elif cursor.execute(
-         'SELECT id FROM user WHERE username = ?', (username,)
+         'SELECT username FROM user WHERE username = ?', (username,)
       ).fetchone() is not None:
          error = 'User {} is already registered.'.format(username)     
 
@@ -76,17 +79,18 @@ def register():
                'INSERT INTO user (username, password) VALUES (?, ?)',
                (username, generate_password_hash(password))
          )
-         cursor.commit()
          cursor.close()
+         conn.commit() 
          conn.close()
-         return redirect(url_for('upload_file'))
+         return render_template('login.html')
 
       cursor.close()
       conn.close()
-      return error
+      flash(error)
+      return render_template('register.html')
 
 	
-@app.route('/', methods = ['GET', 'POST'])
+@app.route('/upload', methods = ['GET', 'POST'])
 def upload_file():
    if request.method == 'POST':
       f = request.files['file']
@@ -134,7 +138,9 @@ def upload_file():
 
       pdfFileObj.close()  
 
-      return 'file uploaded successfully'
+      flash('file uploaded successfully')
+
+      return render_template('upload.html')
 
 if __name__ == '__main__':
   app.run(debug = True)
