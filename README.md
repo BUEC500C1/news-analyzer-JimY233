@@ -3,15 +3,15 @@ Jiaming Yu
 U72316560
 
 ## Phase 2
-Use Flask to implement api
-Details are in app.py
-It use PyPDF2 to convert pdf to text and save the text part in sqlite3 database "mydatabase.db"
-It uses upload.html in templates
-It implement login by checking username and password in database.
-nlp analysis is in nlp folder
+Use Flask to implement api  
+Details are in app.py  
+It use PyPDF2 to convert pdf to text and save the text part in sqlite3 database "mydatabase.db"  
+It uses upload.html in templates  
+It implement login by checking username and password in database.  
+nlp analysis is in nlp folder  
 
 ## Phase 1
-Three APIs: Secure File Uploader/Ingester; Text NLP Analysis; News feed Ingester
+Three APIs: Secure File Uploader/Ingester; Text NLP Analysis; News feed Ingester  
 Stub implementation and documenting part are explained in Modules folder
 
 ### User Stories
