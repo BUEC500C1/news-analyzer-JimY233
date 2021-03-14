@@ -1,17 +1,8 @@
 <!doctype html>
-<title>Upload new File</title>
+<title>File Query</title>
 <html>
    <body>
-      <h1>Upload new File</h1>
-      <form action = "{{url_for('.upload_file') }}" method = "POST" 
-         enctype = "multipart/form-data">
-         <p>Please upload PDF files</p>
-         <input type = "file" name = "file" />
-         <input type = "submit"/>
-         {% for message in get_flashed_messages() %}
-         <div class=flash>{{ message }}</div>
-         {% endfor %}
-      </form>   
+      <h1>NLP analysis</h1>
       <div>
          <form action = "{{url_for('.file_query') }}" method = "POST">
          <p>Search according to keyword</p>
@@ -23,9 +14,17 @@
          </form>   
       </div>
       <div>
+        <form action= '/upload' method = "POST">
+           <input type = "submit" value="Return to upload page"/>
+        </form>
+     </div>
+      <div>
          <form action= '/'>
             <input type = "submit" value="Log out"/>
          </form>
+      </div>
+      <div>
+          <p>{{data}}</p>
       </div>
    </body>
 </html>
