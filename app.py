@@ -49,7 +49,7 @@ def login():
          if error is None:
             session.clear()
             session['user_id'] = user[0]
-            return render_template('upload.html')
+            return render_template('upload.html', user = username)
             #return redirect(url_for('upload',user_id = username))
 
          cursor.close()
