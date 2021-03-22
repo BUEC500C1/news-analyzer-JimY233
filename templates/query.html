@@ -5,7 +5,7 @@
       <h1>NLP analysis</h1>
       <div>
          <form action = "{{url_for('.file_query') }}" method = "POST">
-         <p>Search according to keyword</p>
+         <h3>Search according to keyword</h3>
          <input type = "text" name = "keyword" id = "keyword" />
          <input type = "submit" value="search"/>
          {% for message in get_flashed_messages() %}
@@ -14,17 +14,22 @@
          </form>   
       </div>
       <div>
-        <form action= '/upload' method = "POST">
+        <form action= '/upload'>
+           <h3>Return to upload page</h3>
            <input type = "submit" value="Return to upload page"/>
         </form>
      </div>
       <div>
          <form action= '/'>
+            <h3>Log out</h3>
             <input type = "submit" value="Log out"/>
          </form>
       </div>
       <div>
-          <p>{{data}}</p>
+         <h3>Keyword Frequency:</h3>
+         <p>{{freq}}</p>
+         <h3>Text content:</h3>
+         <p>{{data}}</p>
       </div>
    </body>
 </html>

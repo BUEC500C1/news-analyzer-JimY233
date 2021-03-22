@@ -2,6 +2,7 @@ import nltk
 from nltk.probability import FreqDist
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 nltk.download('vader_lexicon')
+nltk.download('punkt')
 import logging
 
 def convert(text): 

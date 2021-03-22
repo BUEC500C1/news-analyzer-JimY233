@@ -16,10 +16,12 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(24) 
 
 #where pdf files saved
-app.config['UPLOAD_FOLDER'] = 'C:/Users/user/Downloads/'
+#app.config['UPLOAD_FOLDER'] = 'C:/Users/user/Downloads/'
+app.config['UPLOAD_FOLDER'] = 'C:/Users/yjm57/Downloads/'
 
 @app.route('/')
 def home():
+   session.clear()
    return render_template('login.html')
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -37,10 +39,10 @@ def login():
          user = cursor.execute(
              'SELECT * FROM user WHERE username = ?', (username,)
          ).fetchone()
-         print(user)
+         #print(user)
          if user is None:
             error = 'Incorrect username.'
-         #user is tuple 0-username 1-password
+         #user is tuple 0-username 1-password; to change this, we can use detect_types when connect
          elif not check_password_hash(str(user[1]), password):
             error = 'Incorrect password.'
 
@@ -48,11 +50,13 @@ def login():
             session.clear()
             session['user_id'] = user[0]
             return render_template('upload.html')
+            #return redirect(url_for('upload',user_id = username))
 
          cursor.close()
          conn.close()
          flash(error)
-         return render_template('login.html')
+
+   return render_template('login.html')
 
 @app.route('/register', methods=('GET', 'POST'))
 def register():
@@ -87,64 +91,86 @@ def register():
       cursor.close()
       conn.close()
       flash(error)
-      return render_template('register.html')
+
+   return render_template('register.html')
 
 	
 @app.route('/upload', methods = ['GET', 'POST'])
+#@app.route('/upload/<user_id>', methods = ['GET', 'POST'])
 def upload_file():
+   user_id = session.get('user_id')
+   if user_id is None:
+      return render_template('login.html')
+
    if request.method == 'POST':
       if 'file' in request.files:
          f = request.files['file']
-         filename = secure_filename(f.filename)
-         path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-         f.save(path)
-         logging.info("PDF temporarily saved")
+         if f.filename != '':
+            filename = secure_filename(f.filename)
+            path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            f.save(path)
+            logging.info("PDF temporarily saved")
 
-         page_content = ""
-         pdfFileObj = open(path, 'rb') 
-         pdfReader = PyPDF2.PdfFileReader(pdfFileObj)
-         totalpage = pdfReader.numPages
-         logging.info("Number of pages:",totalpage)
-         for page in range(totalpage): 
-            pageObject = pdfReader.getPage(page) 
-            page_content = page_content + pageObject.extractText()
-         logging.info("PDF converted to text")
+            page_content = ""
+            pdfFileObj = open(path, 'rb') 
+            pdfReader = PyPDF2.PdfFileReader(pdfFileObj)
+            totalpage = pdfReader.numPages
+            logging.info("Number of pages:",totalpage)
+            for page in range(totalpage): 
+               pageObject = pdfReader.getPage(page) 
+               page_content = page_content + pageObject.extractText()
+            logging.info("PDF converted to text")
 
-         #os.remove(path)
-         #logging.info("PDF deleted")
+            #os.remove(path)
+            #logging.info("PDF deleted")
 
-         #database insert
-         conn = sqlite3.connect('mydatabase.db')
-         cursor = conn.cursor ()
-         cursor.execute('create table if not exists files (id, text)') 
-         id = 0  
-         cursor.execute('insert into files values(?,?)',(id,page_content))
-         cursor.close()  
-         conn.commit()   
-         conn.close()
+            #database insert
+            conn = sqlite3.connect('mydatabase.db')
+            cursor = conn.cursor ()
+            cursor.execute('create table if not exists files (user_id, file_id, text)') 
+            records = cursor.execute(
+               'SELECT file_id FROM files WHERE user_id = ?', (user_id,)
+            ).fetchall()
+            updated = False
+            for record in records:
+               if record[0] == filename:
+                  cursor.execute('update files set text = ? where user_id = ? and file_id = ?',(page_content,user_id,filename))
+                  updated = True
+            if updated:
+               flash('file uploaded and updated successfully')
+            else:
+               cursor.execute('insert into files values(?,?,?)',(user_id,filename,page_content))
+               flash('file uploaded and saved successfully')
+            cursor.close()  
+            conn.commit()   
+            conn.close()
 
-         #database search
-         conn = sqlite3.connect('mydatabase.db')
-         cursor = conn.cursor()
-         cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
-         Tables=cursor.fetchall()
-         logging.info("Tables in the databse:",Tables)
-         cursor.execute('select text from files where id=?', (0,))
-         values = cursor.fetchall()
-         #print(type(values)) #values in class list
-         freq = search_nlp("Discussion",values)
-         print(freq) #keyword freq search
-         cursor.close()
-         conn.close()
+            #database search
+            conn = sqlite3.connect('mydatabase.db')
+            cursor = conn.cursor()
+            cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+            Tables=cursor.fetchall()
+            logging.info("Tables in the databse:",Tables)
+            values = cursor.execute('select file_id from files where user_id=?', (user_id,)).fetchall()
+            cursor.close()
+            conn.close()
 
-         pdfFileObj.close()  
+            pdfFileObj.close() 
 
-         flash('file uploaded successfully')
+            return render_template('upload.html', user = user_id, filenames = values)
 
-      return render_template('upload.html')
+         #f.filename=='' i.e. user did not select a file but click upload
+         else:
+            flash("no files selected")
+
+   return render_template('upload.html', user = user_id)
 
 @app.route('/query', methods = ['GET', 'POST'])
 def file_query():
+   user_id = session.get('user_id')
+   if user_id is None:
+      return render_template('login.html')
+
    if request.method == 'POST' and 'keyword' in request.form:
       keyword = request.form['keyword']
       content = ""
@@ -158,15 +184,15 @@ def file_query():
          cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
          Tables=cursor.fetchall()
          logging.info("Tables in the databse:",Tables)
-         cursor.execute('select text from files where id=?', (0,))
+         cursor.execute('select text from files where user_id=?', (user_id,))
          content = cursor.fetchall()
          #print(type(values)) #values in class list
          freq = search_nlp(keyword,content)
-         flash(freq) #keyword freq search
          cursor.close()
          conn.close()
+         return render_template('query.html', data=content, freq=freq)
 
-      return render_template('query.html',data=content)
+   return render_template('query.html')
 
 if __name__ == '__main__':
   app.run(debug = True)
