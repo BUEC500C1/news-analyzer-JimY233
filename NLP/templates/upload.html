@@ -12,10 +12,11 @@
          {% for message in get_flashed_messages() %}
          <div class=flash>{{ message }}</div>
          {% endfor %}
+         <h3>filenames already in the database</h3>
          <p>{{filenames}}</p>
       </form>   
       <div>
-         <form action = "{{url_for('.file_query') }}">
+         <form action = "{{url_for('.file_select') }}">
          <h3>NLP analyze the files you uploaded</h3>
          <input type = "submit" value="Analyze"/>
          </form>   

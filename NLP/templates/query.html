@@ -5,6 +5,11 @@
       <h1>NLP analysis</h1>
       <div>
          <form action = "{{url_for('.file_query') }}" method = "POST">
+         <h1>Welcome {{user}}</h1>
+         <h3>Filenames already in the database:</h3>
+         <p>{{filenames}}</p>
+         <h3>Selected files:</h3>
+         <p>{{selected}}</p>
          <h3>Search according to keyword</h3>
          <input type = "text" name = "keyword" id = "keyword" />
          <input type = "submit" value="search"/>
@@ -12,6 +17,12 @@
          <div class=flash>{{ message }}</div>
          {% endfor %}
          </form>   
+      </div>
+      <div>
+         <form action= '/select'>
+            <h3>Return to upload page</h3>
+            <input type = "submit" value="Return to select page"/>
+         </form>
       </div>
       <div>
         <form action= '/upload'>
@@ -26,6 +37,7 @@
          </form>
       </div>
       <div>
+         <h2>Analysis Result:</h2>
          <h3>Keyword Frequency:</h3>
          <p>{{freq}}</p>
          <h3>Text content:</h3>

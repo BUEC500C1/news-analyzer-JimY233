@@ -49,8 +49,12 @@ def login():
          if error is None:
             session.clear()
             session['user_id'] = user[0]
-            return render_template('upload.html', user = username)
-            #return redirect(url_for('upload',user_id = username))
+            cursor.execute('create table if not exists files (user_id, file_id, text)')
+            values = cursor.execute('select file_id from files where user_id=?', (username,)).fetchall()
+            cursor.close()
+            conn.close()
+
+            return render_template('upload.html', user = username, filenames = values)
 
          cursor.close()
          conn.close()
@@ -145,31 +149,66 @@ def upload_file():
             conn.commit()   
             conn.close()
 
-            #database search
-            conn = sqlite3.connect('mydatabase.db')
-            cursor = conn.cursor()
-            cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
-            Tables=cursor.fetchall()
-            logging.info("Tables in the databse:",Tables)
-            values = cursor.execute('select file_id from files where user_id=?', (user_id,)).fetchall()
-            cursor.close()
-            conn.close()
-
             pdfFileObj.close() 
-
-            return render_template('upload.html', user = user_id, filenames = values)
 
          #f.filename=='' i.e. user did not select a file but click upload
          else:
             flash("no files selected")
+      
+   #database search
+   conn = sqlite3.connect('mydatabase.db')
+   cursor = conn.cursor()
+   #cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+   #Tables=cursor.fetchall()
+   #logging.info("Tables in the databse:",Tables)
+   records = cursor.execute('select file_id from files where user_id=?', (user_id,)).fetchall()
+   cursor.close()
+   conn.close()
 
-   return render_template('upload.html', user = user_id)
+   return render_template('upload.html', user = user_id, filenames = records)
+
+@app.route('/select', methods = ['GET', 'POST'])
+def file_select():
+   user_id = session.get('user_id')
+   if user_id is None:
+      return render_template('login.html')
+   
+   conn = sqlite3.connect('mydatabase.db')
+   cursor = conn.cursor()
+   records = cursor.execute('select file_id from files where user_id=?', (user_id,)).fetchall()
+   cursor.close()
+   conn.close()
+
+   if request.method == 'POST' and 'selectedfile' in request.form:
+      select = request.form['selectedfile']
+      if not select:
+         error = 'Please enter filename to be selected to analysis.'
+         flash(error)
+      else:
+         for record in records:
+            if record[0] == select:
+               session['file_id'] = record[0]
+               return render_template('query.html', user = user_id,  filenames = records, selected = select)
+         flash("wrong file name selected")
+
+   return render_template('select.html', user = user_id,  filenames = records)
+
 
 @app.route('/query', methods = ['GET', 'POST'])
 def file_query():
    user_id = session.get('user_id')
    if user_id is None:
       return render_template('login.html')
+
+   conn = sqlite3.connect('mydatabase.db')
+   cursor = conn.cursor()
+   records = cursor.execute('select file_id from files where user_id=?', (user_id,)).fetchall()
+   cursor.close()
+   conn.close()
+
+   file_id = session.get('file_id')
+   if file_id is None:
+      return render_template('select.html', user = user_id,  filenames = records)
 
    if request.method == 'POST' and 'keyword' in request.form:
       keyword = request.form['keyword']
@@ -181,20 +220,20 @@ def file_query():
          #database search
          conn = sqlite3.connect('mydatabase.db')
          cursor = conn.cursor()
-         cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
-         Tables=cursor.fetchall()
-         logging.info("Tables in the databse:",Tables)
-         cursor.execute('select text from files where user_id=?', (user_id,))
+         #cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+         #Tables=cursor.fetchall()
+         #logging.info("Tables in the databse:",Tables)
+         cursor.execute('select text from files where user_id=? and file_id=?', (user_id,file_id))
          content = cursor.fetchall()
          #print(type(values)) #values in class list
          freq = search_nlp(keyword,content)
          cursor.close()
          conn.close()
-         return render_template('query.html', data=content, freq=freq)
+         return render_template('query.html', user = user_id,  filenames = records, selected = file_id, data=content, freq=freq)
 
-   return render_template('query.html')
+   return render_template('query.html', user = user_id,  filenames = records, selected = file_id)
 
 if __name__ == '__main__':
-  app.run(debug = True)
-  #app.run(host='0.0.0.0', port=443)
+  #app.run(debug = True)
+  app.run(host='0.0.0.0', port=443)
 
