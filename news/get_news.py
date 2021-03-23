@@ -30,5 +30,5 @@ def download_news(url):
 
 
 if __name__ == '__main__':
-    url = "http://edition.cnn.com/mostpopular/"
+    url = "https://www.cnn.com/world"
     download_news(url)
