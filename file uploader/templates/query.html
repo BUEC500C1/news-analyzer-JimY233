@@ -10,6 +10,10 @@
          <p>{{filenames}}</p>
          <h3>Selected files:</h3>
          <p>{{selected}}</p>
+         <h3>Sentiment Analyze</h3>
+         <input type = "submit" value="sentiment"/>
+         </form>
+         <form action = "{{url_for('.file_query') }}" method = "POST">
          <h3>Search according to keyword</h3>
          <input type = "text" name = "keyword" id = "keyword" />
          <input type = "submit" value="search"/>
@@ -38,6 +42,8 @@
       </div>
       <div>
          <h2>Analysis Result:</h2>
+         <h3>Sentiment Analysis:</h3>
+         <p>{{sentiment}}</p>
          <h3>Keyword Frequency:</h3>
          <p>{{freq}}</p>
          <h3>Text content:</h3>

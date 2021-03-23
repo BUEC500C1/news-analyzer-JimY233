@@ -1,3 +1,8 @@
+"""
+Jiaming Yu U72316560
+NLP Module
+"""
+
 import flask
 from flask import Flask,render_template, request, redirect, url_for,flash,session
 
@@ -11,9 +16,13 @@ import os
 import logging
 
 from nlp.nlp_search import *
+from nlp.NLPAPI import *
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(24) 
+
+#where database
+app.config['DATABASE'] = r'C:\Users\yjm57\OneDrive\Documents\GitHub\news-analyzer-JimY233\mydatabase'
 
 #where pdf files saved
 #app.config['UPLOAD_FOLDER'] = 'C:/Users/user/Downloads/'
@@ -31,7 +40,7 @@ def login():
          username = request.form['username']
          password = request.form['password']
 
-         conn = sqlite3.connect('mydatabase.db')
+         conn = sqlite3.connect(app.config['DATABASE'])
          cursor = conn.cursor()
          cursor.execute('create table if not exists user (username, password)') 
 
@@ -54,7 +63,7 @@ def login():
             cursor.close()
             conn.close()
 
-            return render_template('upload.html', user = username, filenames = values)
+            return render_template('select.html', user = username, filenames = values)
 
          cursor.close()
          conn.close()
@@ -68,7 +77,7 @@ def register():
       username = request.form['username']
       password = request.form['password']
       
-      conn = sqlite3.connect('mydatabase.db')
+      conn = sqlite3.connect(app.config['DATABASE'])
       cursor = conn.cursor ()
       cursor.execute('create table if not exists user (username, password)') 
       
@@ -129,7 +138,7 @@ def upload_file():
             #logging.info("PDF deleted")
 
             #database insert
-            conn = sqlite3.connect('mydatabase.db')
+            conn = sqlite3.connect(app.config['DATABASE'])
             cursor = conn.cursor ()
             cursor.execute('create table if not exists files (user_id, file_id, text)') 
             records = cursor.execute(
@@ -156,7 +165,7 @@ def upload_file():
             flash("no files selected")
       
    #database search
-   conn = sqlite3.connect('mydatabase.db')
+   conn = sqlite3.connect(app.config['DATABASE'])
    cursor = conn.cursor()
    #cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
    #Tables=cursor.fetchall()
@@ -173,7 +182,7 @@ def file_select():
    if user_id is None:
       return render_template('login.html')
    
-   conn = sqlite3.connect('mydatabase.db')
+   conn = sqlite3.connect(app.config['DATABASE'])
    cursor = conn.cursor()
    records = cursor.execute('select file_id from files where user_id=?', (user_id,)).fetchall()
    cursor.close()
@@ -200,37 +209,33 @@ def file_query():
    if user_id is None:
       return render_template('login.html')
 
-   conn = sqlite3.connect('mydatabase.db')
+   conn = sqlite3.connect(app.config['DATABASE'])
    cursor = conn.cursor()
    records = cursor.execute('select file_id from files where user_id=?', (user_id,)).fetchall()
-   cursor.close()
-   conn.close()
 
    file_id = session.get('file_id')
    if file_id is None:
       return render_template('select.html', user = user_id,  filenames = records)
 
-   if request.method == 'POST' and 'keyword' in request.form:
-      keyword = request.form['keyword']
-      content = ""
-      if not keyword:
-         error = 'Please enter key word.'
-         flash(error)
+   content = ""
+   if request.method == 'POST':
+      cursor.execute('select text from files where user_id=? and file_id=?', (user_id,file_id))
+      content = cursor.fetchall()
+      text = convert(content)
+      if 'keyword' in request.form:
+         keyword = request.form['keyword']
+         if not keyword:
+            error = 'Please enter key word.'
+            flash(error)
+         else:
+            freq = search_nlp(keyword,content)
+            return render_template('query.html', user = user_id,  filenames = records, selected = file_id, data=content, freq=freq)
       else:
-         #database search
-         conn = sqlite3.connect('mydatabase.db')
-         cursor = conn.cursor()
-         #cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
-         #Tables=cursor.fetchall()
-         #logging.info("Tables in the databse:",Tables)
-         cursor.execute('select text from files where user_id=? and file_id=?', (user_id,file_id))
-         content = cursor.fetchall()
-         #print(type(values)) #values in class list
-         freq = search_nlp(keyword,content)
-         cursor.close()
-         conn.close()
-         return render_template('query.html', user = user_id,  filenames = records, selected = file_id, data=content, freq=freq)
+         sentiment = NLP_analyze(text)
+         return render_template('query.html', user = user_id,  filenames = records, selected = file_id, data=content, sentiment = sentiment)
 
+   cursor.close()
+   conn.close()
    return render_template('query.html', user = user_id,  filenames = records, selected = file_id)
 
 if __name__ == '__main__':

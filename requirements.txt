@@ -2,3 +2,6 @@ Flask
 flask-restful
 Werkzeug
 PyPDF2
+google-cloud-language
+beautifulsoup4
+html5lib
