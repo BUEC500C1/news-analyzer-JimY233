@@ -2,6 +2,8 @@
 Jiaming Yu
 U72316560
 
+<div align=center><img width='150'src="https://github.com/BUEC500C1/news-analyzer-JimY233/blob/main/Figures/ec2_file_login.PNG"/></div>
+
 ## Phase 2
 Use Flask to implement api  
 Details are in app.py  
