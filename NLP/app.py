@@ -22,7 +22,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(24) 
 
 #where database
-app.config['DATABASE'] = r'C:\Users\yjm57\OneDrive\Documents\GitHub\news-analyzer-JimY233\mydatabase'
+app.config['DATABASE'] = r'C:\Users\yjm57\OneDrive\Documents\GitHub\news-analyzer-JimY233\mydatabase.db'
 
 #where pdf files saved
 #app.config['UPLOAD_FOLDER'] = 'C:/Users/user/Downloads/'

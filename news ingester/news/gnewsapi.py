@@ -1,4 +1,5 @@
 import requests
+import json
 
 url = "https://google-news.p.rapidapi.com/v1/topic_headlines"
 
@@ -11,4 +12,12 @@ headers = {
 
 response = requests.request("GET", url, headers=headers, params=querystring)
 
-print(response.text)
+#print(response.text)
+
+json_dictionary = response.json()
+print(json_dictionary)
+# Loop through dictionary keys to access each article
+for item in json_dictionary['articles']:
+    # Pull the title for this article into a variable.
+    thisTitle = item['title']
+    print("Title:", thisTitle)
