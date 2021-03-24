@@ -21,10 +21,12 @@ from nlp.NLPAPI import *
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(24) 
 
-#where database
+#where database locally
+#app.config['DATABASE'] = r'/home/ubuntu/news-analyzer-JimY233\mydatabase.db'
 app.config['DATABASE'] = r'C:\Users\yjm57\OneDrive\Documents\GitHub\news-analyzer-JimY233\mydatabase.db'
 
-#where pdf files saved
+#where pdf files saved locally
+#app.config['UPLOAD_FOLDER'] = '/home/ubuntu/news-analyzer-JimY233/file_uploader/pdfexamples/'
 #app.config['UPLOAD_FOLDER'] = 'C:/Users/user/Downloads/'
 app.config['UPLOAD_FOLDER'] = 'C:/Users/yjm57/Downloads/'
 

@@ -22,13 +22,14 @@ from news.newsapi import *
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(24) 
 
-#where database
+#where database on EC2
+app.config['DATABASE'] = r'/home/ubuntu/news-analyzer-JimY233\mydatabase.db'
 #app.config['DATABASE'] = r'C:\Users\yjm57\OneDrive\Documents\GitHub\news-analyzer-JimY233\mydatabase.db'
-app.config['DATABASE'] = 'testdb.db'
 
-#where pdf files saved
+#where pdf files saved on EC2
+app.config['UPLOAD_FOLDER'] = '/home/ubuntu/news-analyzer-JimY233/file_uploader/pdfexamples/'
 #app.config['UPLOAD_FOLDER'] = 'C:/Users/user/Downloads/'
-app.config['UPLOAD_FOLDER'] = 'C:/Users/yjm57/Downloads/'
+#app.config['UPLOAD_FOLDER'] = 'C:/Users/yjm57/Downloads/'
 
 @app.route('/')
 def home():

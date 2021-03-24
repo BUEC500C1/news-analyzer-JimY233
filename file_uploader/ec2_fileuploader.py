@@ -16,17 +16,18 @@ import os
 import logging
 
 from nlp.nlp_search import *
-from nlp.NLPAPI import *
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(24) 
 
-#where database
-app.config['DATABASE'] = r'C:\Users\yjm57\OneDrive\Documents\GitHub\news-analyzer-JimY233\mydatabase.db'
+#where database on EC2
+app.config['DATABASE'] = r'/home/ubuntu/news-analyzer-JimY233\mydatabase.db'
+#app.config['DATABASE'] = r'C:\Users\yjm57\OneDrive\Documents\GitHub\news-analyzer-JimY233\mydatabase.db'
 
-#where pdf files saved
+#where pdf files saved on EC2
+app.config['UPLOAD_FOLDER'] = '/home/ubuntu/news-analyzer-JimY233/file_uploader/pdfexamples/'
 #app.config['UPLOAD_FOLDER'] = 'C:/Users/user/Downloads/'
-app.config['UPLOAD_FOLDER'] = 'C:/Users/yjm57/Downloads/'
+#app.config['UPLOAD_FOLDER'] = 'C:/Users/yjm57/Downloads/'
 
 @app.route('/')
 def home():
@@ -212,33 +213,37 @@ def file_query():
    conn = sqlite3.connect(app.config['DATABASE'])
    cursor = conn.cursor()
    records = cursor.execute('select file_id from files where user_id=?', (user_id,)).fetchall()
+   cursor.close()
+   conn.close()
 
    file_id = session.get('file_id')
    if file_id is None:
       return render_template('select.html', user = user_id,  filenames = records)
 
-   content = ""
-   if request.method == 'POST':
-      cursor.execute('select text from files where user_id=? and file_id=?', (user_id,file_id))
-      content = cursor.fetchall()
-      text = convert(content)
-      if 'keyword' in request.form:
-         keyword = request.form['keyword']
-         if not keyword:
-            error = 'Please enter key word.'
-            flash(error)
-         else:
-            freq = search_nlp(keyword,content)
-            return render_template('query.html', user = user_id,  filenames = records, selected = file_id, data=content, freq=freq)
+   if request.method == 'POST' and 'keyword' in request.form:
+      keyword = request.form['keyword']
+      content = ""
+      if not keyword:
+         error = 'Please enter key word.'
+         flash(error)
       else:
-         sentiment = NLP_analyze(text)
-         return render_template('query.html', user = user_id,  filenames = records, selected = file_id, data=content, sentiment = sentiment)
+         #database search
+         conn = sqlite3.connect(app.config['DATABASE'])
+         cursor = conn.cursor()
+         #cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+         #Tables=cursor.fetchall()
+         #logging.info("Tables in the databse:",Tables)
+         cursor.execute('select text from files where user_id=? and file_id=?', (user_id,file_id))
+         content = cursor.fetchall()
+         #print(type(values)) #values in class list
+         freq = search_nlp(keyword,content)
+         cursor.close()
+         conn.close()
+         return render_template('query.html', user = user_id,  filenames = records, selected = file_id, data=content, freq=freq)
 
-   cursor.close()
-   conn.close()
    return render_template('query.html', user = user_id,  filenames = records, selected = file_id)
 
 if __name__ == '__main__':
-  app.run(debug = True)
-  #app.run(host='0.0.0.0', port=443)
+  #app.run(debug = True)
+  app.run(host='0.0.0.0', port=443)
 
