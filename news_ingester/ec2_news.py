@@ -1,6 +1,6 @@
 """
 Jiaming Yu U72316560
-File Uploader Module
+News Ingester Module
 """
 
 import flask
@@ -16,15 +16,17 @@ import os
 import logging
 
 from nlp.nlp_search import *
+from nlp.NLPAPI import *
+from news.newsapi import *
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(24) 
 
-#where database on EC2
-app.config['DATABASE'] = r'/home/ubuntu/news-analyzer-JimY233\mydatabase.db'
+#where database locally
+app.config['DATABASE'] = r'/home/ubuntu/news-analyzer-JimY233/mydatabase.db'
 #app.config['DATABASE'] = r'C:\Users\yjm57\OneDrive\Documents\GitHub\news-analyzer-JimY233\mydatabase.db'
 
-#where pdf files saved on EC2
+#where pdf files saved locally
 app.config['UPLOAD_FOLDER'] = '/home/ubuntu/news-analyzer-JimY233/file_uploader/pdfexamples/'
 #app.config['UPLOAD_FOLDER'] = 'C:/Users/user/Downloads/'
 #app.config['UPLOAD_FOLDER'] = 'C:/Users/yjm57/Downloads/'
@@ -64,7 +66,7 @@ def login():
             cursor.close()
             conn.close()
 
-            return render_template('upload.html', user = username, filenames = values)
+            return render_template('ingest.html', user = username, filenames = values)
 
          cursor.close()
          conn.close()
@@ -109,73 +111,64 @@ def register():
    return render_template('register.html')
 
 	
-@app.route('/upload', methods = ['GET', 'POST'])
+@app.route('/ingest', methods = ['GET', 'POST'])
 #@app.route('/upload/<user_id>', methods = ['GET', 'POST'])
-def upload_file():
+def news_ingest():
    user_id = session.get('user_id')
    if user_id is None:
       return render_template('login.html')
 
    if request.method == 'POST':
-      if 'file' in request.files:
-         f = request.files['file']
-         if f.filename != '':
-            filename = secure_filename(f.filename)
-            path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            f.save(path)
-            logging.info("PDF temporarily saved")
-
-            page_content = ""
-            pdfFileObj = open(path, 'rb') 
-            pdfReader = PyPDF2.PdfFileReader(pdfFileObj)
-            totalpage = pdfReader.numPages
-            logging.info("Number of pages:",totalpage)
-            for page in range(totalpage): 
-               pageObject = pdfReader.getPage(page) 
-               page_content = page_content + pageObject.extractText()
-            logging.info("PDF converted to text")
-
-            #os.remove(path)
-            #logging.info("PDF deleted")
-
-            #database insert
-            conn = sqlite3.connect(app.config['DATABASE'])
-            cursor = conn.cursor ()
-            cursor.execute('create table if not exists files (user_id, file_id, text)') 
-            records = cursor.execute(
-               'SELECT file_id FROM files WHERE user_id = ?', (user_id,)
-            ).fetchall()
-            updated = False
-            for record in records:
-               if record[0] == filename:
-                  cursor.execute('update files set text = ? where user_id = ? and file_id = ?',(page_content,user_id,filename))
-                  updated = True
-            if updated:
-               flash('file uploaded and updated successfully')
-            else:
-               cursor.execute('insert into files values(?,?,?)',(user_id,filename,page_content))
-               flash('file uploaded and saved successfully')
-            cursor.close()  
-            conn.commit()   
-            conn.close()
-
-            pdfFileObj.close() 
-
-         #f.filename=='' i.e. user did not select a file but click upload
+      titles = []
+      contents = []
+      if 'num' in request.form and 'keyword' in request.form:
+         num = request.form['num']
+         keyword = request.form['keyword']
+         if not num:
+            error = 'Please enter number of news required.'
+            flash(error)
+         elif not keyword:
+            error = 'Please enter key word.'
+            flash(error)
          else:
-            flash("no files selected")
+            try:
+               num = int(num)
+            except:
+               num = 1
+               flash("Invalid number and thus use default number = 1")
+            if num >=1 and num <= 100:
+               response_json = newsapi(keyword,num)
+               conn = sqlite3.connect(app.config['DATABASE'])
+               cursor = conn.cursor ()
+               cursor.execute('create table if not exists news (user_id, id INTEGER PRIMARY KEY, keyword, title, content)') 
+               existed = False
+               records = cursor.execute('select id, title from news where user_id=?', (user_id,)).fetchall()
+               for i in response_json['articles']:
+                  titles.append(i['title'])
+                  contents.append(i['title']+" "+i['content'])
+                  for record in records:
+                     if i['title'] == record[1]:
+                        existed = True
+                  if not existed:
+                     cursor.execute('insert into news (user_id, keyword, title, content) values(?,?,?,?)',(user_id,keyword,i['title'], i['title']+" "+i['content']))
+               flash('news downloaded successfully')
+               records = cursor.execute('select id, title from news where user_id=?', (user_id,)).fetchall()
+               cursor.close()  
+               conn.commit()   
+               conn.close()
+
+               return render_template('ingest.html', user = user_id, records = records, titles = titles, content = contents)
+
+            else:
+               flash("number out of range")
       
-   #database search
    conn = sqlite3.connect(app.config['DATABASE'])
    cursor = conn.cursor()
-   #cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
-   #Tables=cursor.fetchall()
-   #logging.info("Tables in the databse:",Tables)
-   records = cursor.execute('select file_id from files where user_id=?', (user_id,)).fetchall()
+   records = cursor.execute('select id, title from news where user_id=?', (user_id,)).fetchall()
    cursor.close()
    conn.close()
 
-   return render_template('upload.html', user = user_id, filenames = records)
+   return render_template('ingest.html', user = user_id, records = records)
 
 @app.route('/select', methods = ['GET', 'POST'])
 def file_select():
@@ -185,7 +178,7 @@ def file_select():
    
    conn = sqlite3.connect(app.config['DATABASE'])
    cursor = conn.cursor()
-   records = cursor.execute('select file_id from files where user_id=?', (user_id,)).fetchall()
+   records = cursor.execute('select id, title from news where user_id=?', (user_id,)).fetchall()
    cursor.close()
    conn.close()
 
@@ -195,11 +188,12 @@ def file_select():
          error = 'Please enter filename to be selected to analysis.'
          flash(error)
       else:
+         select = int(select)
          for record in records:
             if record[0] == select:
-               session['file_id'] = record[0]
-               return render_template('query.html', user = user_id,  filenames = records, selected = select)
-         flash("wrong file name selected")
+               session['news_id'] = record[0]
+               return render_template('query.html', user = user_id,  filenames = records, selected = record[1])
+         flash("wrong news id selected")
 
    return render_template('select.html', user = user_id,  filenames = records)
 
@@ -212,35 +206,31 @@ def file_query():
 
    conn = sqlite3.connect(app.config['DATABASE'])
    cursor = conn.cursor()
-   records = cursor.execute('select file_id from files where user_id=?', (user_id,)).fetchall()
-   cursor.close()
-   conn.close()
+   records = cursor.execute('select id, title from news where user_id=?', (user_id,)).fetchall()
 
-   file_id = session.get('file_id')
+   file_id = session.get('news_id')
    if file_id is None:
       return render_template('select.html', user = user_id,  filenames = records)
 
-   if request.method == 'POST' and 'keyword' in request.form:
-      keyword = request.form['keyword']
-      content = ""
-      if not keyword:
-         error = 'Please enter key word.'
-         flash(error)
+   content = ""
+   if request.method == 'POST':
+      cursor.execute('select content from news where user_id=? and id=?', (user_id,file_id))
+      content = cursor.fetchall()
+      text = convert(content)
+      if 'keyword' in request.form:
+         keyword = request.form['keyword']
+         if not keyword:
+            error = 'Please enter key word.'
+            flash(error)
+         else:
+            freq = search_nlp(keyword,content)
+            return render_template('query.html', user = user_id,  filenames = records, selected = file_id, data=content, freq=freq)
       else:
-         #database search
-         conn = sqlite3.connect(app.config['DATABASE'])
-         cursor = conn.cursor()
-         #cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
-         #Tables=cursor.fetchall()
-         #logging.info("Tables in the databse:",Tables)
-         cursor.execute('select text from files where user_id=? and file_id=?', (user_id,file_id))
-         content = cursor.fetchall()
-         #print(type(values)) #values in class list
-         freq = search_nlp(keyword,content)
-         cursor.close()
-         conn.close()
-         return render_template('query.html', user = user_id,  filenames = records, selected = file_id, data=content, freq=freq)
+         sentiment = NLP_analyze(text)
+         return render_template('query.html', user = user_id,  filenames = records, selected = file_id, data=content, sentiment = sentiment)
 
+   cursor.close()
+   conn.close()
    return render_template('query.html', user = user_id,  filenames = records, selected = file_id)
 
 if __name__ == '__main__':

@@ -21,7 +21,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(24) 
 
 #where database on EC2
-app.config['DATABASE'] = r'/home/ubuntu/news-analyzer-JimY233\mydatabase.db'
+app.config['DATABASE'] = r'/home/ubuntu/news-analyzer-JimY233/mydatabase.db'
 #app.config['DATABASE'] = r'C:\Users\yjm57\OneDrive\Documents\GitHub\news-analyzer-JimY233\mydatabase.db'
 
 #where pdf files saved on EC2
