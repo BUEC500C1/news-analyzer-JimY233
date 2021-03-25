@@ -1,6 +1,6 @@
 # Homework 2
-Jiaming Yu
-U72316560
+Jiaming Yu  
+U72316560  
 
 ## Phase 2
 Use Flask to implement api     
@@ -13,7 +13,10 @@ EC2 link: ec2-52-15-71-138.us-east-2.compute.amazonaws.com:443
 (On EC2, requirements like Flask should be installed with `sudo`)  
 html files are kind of different even when they have the same name but in different api modules  
 For each `app.py` and `ec2_*.py`, Remember to change the file location for database to a suitable place  
-Use session to secure the user, every request check session['user_id'], if not, return to login website. Thus people can not directly go to .../upload without logging in  
+Use session to secure the user, every request check session['user_id'], if not, return to login website. Thus people can not directly go to .../upload without logging in 
+
+Before testing in your own computer, please change the file location for database to a suitable place for each `app.py` and `ec2_*.py`
+<div align=center><img width='500'src="https://github.com/BUEC500C1/news-analyzer-JimY233/blob/main/Figures/file_location.PNG"/></div>
 
 **File Uploader**  
 Please check `file_uploader` folder    
