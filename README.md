@@ -25,7 +25,7 @@ html files are saved in templates folder
 Use PyPDF2 to convert pdf to text and save the text part in sqlite3 database "mydatabase.db"     
 It also has nlp analysis function and use nltk and google cloud language api to implement nlp analysis and the functions are saved in `/file_uploader/nlp` folder  
 On EC2 Run `sudo python3 ec2_fileuploader.py`  
-<div align=center><img width='600'src="https://github.com/BUEC500C1/news-analyzer-JimY233/blob/main/Figures/ec2_file_run.PNG"/></div>
+<div align=center><img src="https://github.com/BUEC500C1/news-analyzer-JimY233/blob/main/Figures/ec2_file_run.PNG"/></div>
 
 Then we go to EC2 link  
 and meet the login website (html file is `login.html` in templates folder)  
@@ -60,7 +60,7 @@ html files are saved in templates folder
 alayze the files saved in sqlite3 database "mydatabase.db" (share the database with other two api)  
 It also has nlp analysis function and use nltk and google cloud language api to implement nlp analysis and the functions are saved in `/NLP/nlp` folder  
 On EC2 Run `sudo python3 ec2_nlp.py`  
-<div align=center><img width='600'src="https://github.com/BUEC500C1/news-analyzer-JimY233/blob/main/Figures/ec2_nlp.PNG.PNG"/></div>
+<div align=center><img src="https://github.com/BUEC500C1/news-analyzer-JimY233/blob/main/Figures/ec2_nlp.PNG.PNG"/></div>
 
 All is the same in the file uploader api but when you log in, you skip the upload and directly go to nlp analysis  
 
@@ -72,7 +72,7 @@ Use News Api to download news according to keyword. Functions are in `/news_inge
 Saved in sqlite3 database "mydatabase.db"     
 It also has nlp analysis function and use nltk and google cloud language api to implement nlp analysis and the functions are saved in `/news_ingester/nlp` folder  
 On EC2 Run `sudo python3 ec2_fileuploader.py`  
-<div align=center><img width='600'src="https://github.com/BUEC500C1/news-analyzer-JimY233/blob/main/Figures/ec2_news_run.PNG"/></div>
+<div align=center><img src="https://github.com/BUEC500C1/news-analyzer-JimY233/blob/main/Figures/ec2_news_run.PNG"/></div>
 
 Then we go to EC2 link  
 and meet the login website (html file is `login.html` in templates folder)  
