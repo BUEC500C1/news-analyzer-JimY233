@@ -2,27 +2,33 @@
 Jiaming Yu  
 U72316560  
 
+Three API modules: Secure File Uploader in `file_uploader` folder; Text NLP Analysis in `NLP` folder; News feed Ingester in `news_ingester` folder  
+Stub function is in `Stub REST API implementation` folder  
+
 ## Phase 2
 Use Flask to implement api     
 Three modules: Secure File Uploader in `file_uploader` folder; Text NLP Analysis in `NLP` folder; News feed Ingester in `news_ingester` folder   
-In each folder, `app.py` is the api runned locally in my own computer and `ec2_*.py` is used on EC2  
-Locally: run command `python app.py`  
-Locally debugging: http://127.0.0.0/5000  
-On EC2: `sudo python3 ec2_*.py`  
-EC2 link: ec2-52-15-71-138.us-east-2.compute.amazonaws.com:443  
-(On EC2, requirements like Flask should be installed with `sudo`)  
-html files are kind of different even when they have the same name but in different api modules  
-For each `app.py` and `ec2_*.py`, Remember to change the file location for database to a suitable place  
-Use session to secure the user, every request check session['user_id'], if not, return to login website. Thus people can not directly go to .../upload without logging in 
 
-Before testing in your own computer, please change the file location for database to a suitable place for each `app.py` and `ec2_*.py`
+In each folder, `app.py` is the api runned locally in my own computer and `ec2_*.py` is used on EC2    
+Difference 1 for each `app.py` and `ec2_*.py`: the file location for database is different   
+Before testing in your own computer, please change the file location for database to a suitable place for each `app.py` and `ec2_*.py`  
 <div align=center><img src="https://github.com/BUEC500C1/news-analyzer-JimY233/blob/main/Figures/file_location.PNG"/></div>
+Difference 2 for each `app.py` and `ec2_*.py`: debug and port number  
+<div align=center><img src="https://github.com/BUEC500C1/news-analyzer-JimY233/blob/main/Figures/api_hosting.PNG"/></div>
+Locally: run command `python app.py`    
+Locally debugging: http://127.0.0.0/5000   
+On EC2: `sudo python3 ec2_*.py`   
+EC2 link: ec2-52-15-71-138.us-east-2.compute.amazonaws.com:443    
+(On EC2, requirements like Flask should be installed with `sudo`)     
+
+html files are kind of different even when they have the same name but in different api modules     
+Use session to secure the user, every request check session['user_id'], if not, return to login website. Thus people can not directly go to .../upload without logging in   
 
 **File Uploader**  
 Please check `file_uploader` folder    
 `app.py` is the api runned locally in my own computer and `ec2_fileuploader.py` is used on EC2  
 html files are saved in templates folder  
-Use PyPDF2 to convert pdf to text and save the text part in sqlite3 database "mydatabase.db"     
+Use PyPDF2 to convert pdf to text and save the text part in sqlite3 database "mydatabase.db", all three apis shares the same database       
 It also has nlp analysis function and use nltk and google cloud language api to implement nlp analysis and the functions are saved in `/file_uploader/nlp` folder  
 On EC2 Run `sudo python3 ec2_fileuploader.py`  
 <div align=center><img src="https://github.com/BUEC500C1/news-analyzer-JimY233/blob/main/Figures/ec2_file_run.PNG"/></div>
@@ -69,7 +75,7 @@ Please check `news_ingester` folder
 `app.py` is the api runned locally in my own computer and `ec2_news.py` is used on EC2   
 html files are saved in templates folder  
 Use News Api to download news according to keyword. Functions are in `/news_ingester/news`  
-Saved in sqlite3 database "mydatabase.db"     
+Saved in sqlite3 database "mydatabase.db",  all three apis shares the same database       
 It also has nlp analysis function and use nltk and google cloud language api to implement nlp analysis and the functions are saved in `/news_ingester/nlp` folder  
 On EC2 Run `sudo python3 ec2_fileuploader.py`  
 <div align=center><img src="https://github.com/BUEC500C1/news-analyzer-JimY233/blob/main/Figures/ec2_news_run.PNG"/></div>
