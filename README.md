@@ -9,20 +9,20 @@ Here is where I store my google api key on EC2. The location is defined `/NLP/nl
 <div align=center><img src="https://github.com/BUEC500C1/news-analyzer-JimY233/blob/main/Figures/google_key_location.PNG"/></div>
 
 ## Phase 2
-Use Flask to implement api     
-Three modules: Secure File Uploader in `file_uploader` folder; Text NLP Analysis in `NLP` folder; News feed Ingester in `news_ingester` folder   
+Use Flask to implement api       
+Three modules: Secure File Uploader in `file_uploader` folder; Text NLP Analysis in `NLP` folder; News feed Ingester in `news_ingester` folder     
 
-In each folder, `app.py` is the api runned locally in my own computer and `ec2_*.py` is used on EC2    
-Difference 1 for each `app.py` and `ec2_*.py`: the file location for database is different   
-Before testing in your own computer, please change the file location for database to a suitable place for each `app.py` and `ec2_*.py`  
-<div align=center><img src="https://github.com/BUEC500C1/news-analyzer-JimY233/blob/main/Figures/file_location.PNG"/></div>
-Difference 2 for each `app.py` and `ec2_*.py`: debug and port number  
-<div align=center><img src="https://github.com/BUEC500C1/news-analyzer-JimY233/blob/main/Figures/api_hosting.PNG"/></div>
-Locally: run command `python app.py`    
-Locally debugging: http://127.0.0.0/5000   
-On EC2: `sudo python3 ec2_*.py`   
-EC2 link: ec2-52-15-71-138.us-east-2.compute.amazonaws.com:443    
-(On EC2, requirements like Flask should be installed with `sudo`)     
+In each folder, `app.py` is the api runned locally in my own computer and `ec2_*.py` is used on EC2      
+Difference 1 for each `app.py` and `ec2_*.py`: the file location for database is different     
+Before testing in your own computer, please change the file location for database to a suitable place for each `app.py` and `ec2_*.py`    
+<div align=center><img src="https://github.com/BUEC500C1/news-analyzer-JimY233/blob/main/Figures/file_location.PNG"/></div>  
+Difference 2 for each `app.py` and `ec2_*.py`: debug and port number    
+<div align=center><img src="https://github.com/BUEC500C1/news-analyzer-JimY233/blob/main/Figures/api_hosting.PNG"/></div>  
+Locally: run command `python app.py`      
+Locally debugging: http://127.0.0.0/5000     
+On EC2: `sudo python3 ec2_*.py`     
+EC2 link: ec2-52-15-71-138.us-east-2.compute.amazonaws.com:443      
+(On EC2, requirements like Flask should be installed with `sudo`)       
 
 html files are kind of different even when they have the same name but in different api modules     
 Use session to secure the user, every request check session['user_id'], if not, return to login website. Thus people can not directly go to .../upload without logging in   
