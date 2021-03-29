@@ -2,8 +2,11 @@
 Jiaming Yu  
 U72316560  
 
-Three API modules: Secure File Uploader in `file_uploader` folder; Text NLP Analysis in `NLP` folder; News feed Ingester in `news_ingester` folder  
-Stub function is in `Stub REST API implementation` folder  
+Three API modules: Secure File Uploader in `file_uploader` folder; Text NLP Analysis in `NLP` folder; News feed Ingester in `news_ingester` folder    
+Stub function is in `Stub REST API implementation` folder    
+Attention: On github, I did not include my google api key thus there is some issue in Github Actions but I have done AWS hosting successfully  
+Here is where I store my google api key on EC2. The location is defined `/NLP/nlp/NLPAPI.py`, `/file_uploader/nlp/NLPAPI.py`and `/news_ingester/nlp/NLPAPI.py`  
+<div align=center><img src="https://github.com/BUEC500C1/news-analyzer-JimY233/blob/main/Figures/google_key_location.PNG"/></div>
 
 ## Phase 2
 Use Flask to implement api     
