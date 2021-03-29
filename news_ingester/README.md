@@ -11,23 +11,23 @@ On EC2 Run `sudo python3 ec2_fileuploader.py`
 **Log in**
 Then we go to EC2 link:  ec2-52-15-71-138.us-east-2.compute.amazonaws.com:443
 and meet the login website (html file is `login.html` in templates folder)  
-<div align=center><img width='600'src="https://github.com/BUEC500C1/news-analyzer-JimY233/blob/main/Figures/ec2_news_login.PNG"/></div>
+<div align=center><img src="https://github.com/BUEC500C1/news-analyzer-JimY233/blob/main/Figures/ec2_news_login.PNG"/></div>
 
 **Register**
 We can register one account (`register.html`)  
-<div align=center><img width='600'src="https://github.com/BUEC500C1/news-analyzer-JimY233/blob/main/Figures/ec2_file_register.PNG"/></div>
+<div align=center><img src="https://github.com/BUEC500C1/news-analyzer-JimY233/blob/main/Figures/ec2_file_register.PNG"/></div>
 
 **Ingest**
 After logging in, we can see the news ingester system (`ingest.html`)  
 Username is shown in "Hello username" and all files under this user_id will also be shown  
 You can decide the keyword and number of news you want to download and save to the database  
-<div align=center><img width='600'src="https://github.com/BUEC500C1/news-analyzer-JimY233/blob/main/Figures/ec2_news_ingest.PNG"/></div>
+<div align=center><img src="https://github.com/BUEC500C1/news-analyzer-JimY233/blob/main/Figures/ec2_news_ingest.PNG"/></div>
 
 **Select**
 Then we can click "Analyze" to nlp analyze the articles, we can select the article to analyze. Here I implement primary key and thus we just need to input 1,2,3 as news_id  
-<div align=center><img width='600'src="https://github.com/BUEC500C1/news-analyzer-JimY233/blob/main/Figures/ec2_news_select.PNG"/></div>
+<div align=center><img src="https://github.com/BUEC500C1/news-analyzer-JimY233/blob/main/Figures/ec2_news_select.PNG"/></div>
 
 **NLP Analysis**
 After selected the files to analyze, we can do nlp analysis  
-<div align=center><img width='600'src="https://github.com/BUEC500C1/news-analyzer-JimY233/blob/main/Figures/ec2_news_sentiment.PNG"/></div>
+<div align=center><img src="https://github.com/BUEC500C1/news-analyzer-JimY233/blob/main/Figures/ec2_news_sentiment.PNG"/></div>
 
