@@ -1,5 +1,5 @@
-Three APIs: Secure File Uploader/Ingester; Text NLP Analysis; News feed Ingester    
-Stub implementation and documenting part are explained in `Stub REST API implementation` folder  
+Three APIs: Secure File Uploader/Ingester; Text NLP Analysis; News feed Ingester   
+Under each folder in this folder, stub implementation and documenting part are explained in detail
 
 ### User Stories
 
