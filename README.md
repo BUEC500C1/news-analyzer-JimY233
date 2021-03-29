@@ -18,10 +18,12 @@ Before testing in your own computer, please change the file location for databas
 <div align=center><img src="https://github.com/BUEC500C1/news-analyzer-JimY233/blob/main/Figures/file_location.PNG"/></div>  
 Difference 2 for each `app.py` and `ec2_*.py`: debug and port number    
 <div align=center><img src="https://github.com/BUEC500C1/news-analyzer-JimY233/blob/main/Figures/api_hosting.PNG"/></div>  
-Locally: run command `python app.py`      
-Locally debugging: http://127.0.0.0/5000     
-On EC2: `sudo python3 ec2_*.py`     
-EC2 link: ec2-52-15-71-138.us-east-2.compute.amazonaws.com:443      
+Locally: run command `python app.py`        
+
+Locally debugging: http://127.0.0.0/5000   
+
+On EC2: `sudo python3 ec2_*.py`  
+EC2 link: ec2-52-15-71-138.us-east-2.compute.amazonaws.com:443
 (On EC2, requirements like Flask should be installed with `sudo`)       
 
 html files are kind of different even when they have the same name but in different api modules     
