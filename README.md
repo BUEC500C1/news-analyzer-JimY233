@@ -71,9 +71,11 @@ html files are saved in templates folder
 alayze the files saved in sqlite3 database "mydatabase.db" (share the database with other two api)  
 It also has nlp analysis function and use nltk and google cloud language api to implement nlp analysis and the functions are saved in `/NLP/nlp` folder  
 On EC2 Run `sudo python3 ec2_nlp.py`  
-<div align=center><img src="https://github.com/BUEC500C1/news-analyzer-JimY233/blob/main/Figures/ec2_nlp.PNG.PNG"/></div>
+<div align=center><img src="https://github.com/BUEC500C1/news-analyzer-JimY233/blob/main/Figures/ec2_nlp.PNG"/></div>
 
 All is the same in the file uploader api but when you log in, you skip the upload and directly go to nlp analysis  
+
+<div align=center><img width='600'src="https://github.com/BUEC500C1/news-analyzer-JimY233/blob/main/Figures/ec2_file_analysis1.PNG"/></div>
 
 **News Ingester**  
 Please check `news_ingester` folder    
