@@ -2,6 +2,9 @@
 Jiaming Yu  
 U72316560  
 
+EC2 link:
+now EC2 instance stopped. If you want to check, please email jiamingy@bu.edu
+
 Three API modules: Secure File Uploader in `file_uploader` folder; Text NLP Analysis in `NLP` folder; News feed Ingester in `news_ingester` folder    
 Stub function is in `Stub REST API implementation` folder    
 Attention: On github, I did not include my google api key thus there is some issue in Github Actions but I have done AWS hosting successfully  
