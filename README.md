@@ -4,9 +4,11 @@ U72316560
 
 ## EC2 link
 file_uploader api:  
-ec2-3-12-197-154.us-east-2.compute.amazonaws.com:8080  
+ec2-3-12-197-154.us-east-2.compute.amazonaws.com:8080 
+
 nlp_analysis api:  
 ec2-3-12-197-154.us-east-2.compute.amazonaws.com:7070  
+
 news_ingester api:  
 ec2-3-12-197-154.us-east-2.compute.amazonaws.com:443  
 
