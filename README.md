@@ -2,8 +2,17 @@
 Jiaming Yu  
 U72316560  
 
-EC2 link:
-now EC2 instance stopped. If you want to check, please email jiamingy@bu.edu
+## EC2 link
+file_uploader api:  
+ec2-3-12-197-154.us-east-2.compute.amazonaws.com:8080
+nlp_analysis api:  
+ec2-3-12-197-154.us-east-2.compute.amazonaws.com:7070
+news_ingester api:  
+ec2-3-12-197-154.us-east-2.compute.amazonaws.com:443
+
+If you find that there is any problem like the program on EC2 may stop running, please email jiamingy@bu.edu to let me know as soon as possible, thank you  
+For nlp analysis api, you can log in with username:jiamingy password:123 to do nlp analysis  
+this account also applies to other two module to help you test faster  
 
 Three API modules: Secure File Uploader in `file_uploader` folder; Text NLP Analysis in `NLP` folder; News feed Ingester in `news_ingester` folder    
 Stub function is in `Stub REST API implementation` folder    
@@ -26,7 +35,7 @@ Locally: run command `python app.py`
 Locally debugging: http://127.0.0.0/5000   
 
 On EC2: `sudo python3 ec2_*.py`  
-EC2 link: ec2-52-15-71-138.us-east-2.compute.amazonaws.com:443
+EC2 link: updated every time when I restart the EC2 instance, for the newest link plese see above.
 (On EC2, requirements like Flask should be installed with `sudo`)       
 
 html files are kind of different even when they have the same name but in different api modules     
