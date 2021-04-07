@@ -13,7 +13,12 @@ news_ingester api:
 ec2-3-12-197-154.us-east-2.compute.amazonaws.com:443  
 
 If you find that there is any problem like the program on EC2 may stop running, please email jiamingy@bu.edu to let me know as soon as possible, thank you  
-For nlp analysis api, you can log in with username:jiamingy password:123 to do nlp analysis  
+For nlp analysis api, you can log in with   
+username:  
+jiamingy 
+password:
+123 
+to do nlp analysis  
 this account also applies to other two module to help you test faster  
 
 Three API modules: Secure File Uploader in `file_uploader` folder; Text NLP Analysis in `NLP` folder; News feed Ingester in `news_ingester` folder    
