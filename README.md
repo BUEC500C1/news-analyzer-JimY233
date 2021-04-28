@@ -4,13 +4,13 @@ U72316560
 
 ## EC2 link
 file_uploader api:  
-ec2-3-12-197-154.us-east-2.compute.amazonaws.com:8080 
+ec2-18-222-135-138.us-east-2.compute.amazonaws.com:8080 
 
 nlp_analysis api:  
-ec2-3-12-197-154.us-east-2.compute.amazonaws.com:7070  
+ec2-18-222-135-138.us-east-2.compute.amazonaws.com:7070  
 
 news_ingester api:  
-ec2-3-12-197-154.us-east-2.compute.amazonaws.com:443  
+ec2-18-222-135-138.us-east-2.compute.amazonaws.com:443  
 
 If you find that there is any problem like the program on EC2 may stop running, please email jiamingy@bu.edu to let me know as soon as possible, thank you  
 For nlp analysis api, you can log in with   
